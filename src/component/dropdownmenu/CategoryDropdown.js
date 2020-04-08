@@ -7,14 +7,19 @@ class Dropdown extends React.Component {
         this.state = {
             blogs: [],
             categories: [],
-            isOpen: false
+            isOpen: false,
+            link: '/home?category='
 
         }
-        //this.onCategoryOnChange = this.onCategoryOnChange.bind(this);
 
     }
 
     componentDidMount() {
+
+        if(this.props.link){
+            this.setState({link: this.props.link});
+        }
+
         ProxyServices.getCategoryList()
             .then(response => response.data)
             .then((json) => {
@@ -41,7 +46,7 @@ class Dropdown extends React.Component {
                     Category
                 </button>
                 <div className={menuClass} aria-labelledby="dropdownMenuButton">
-                    {this.state.categories.map((data, i) => <CategoryList key = {i} data = {data} />)}
+                    {this.state.categories.map((data, i) => <CategoryList key = {i} data = {data} link={this.state.link} />)}
                     {console.log(this.state.categories)}
                 </div>
             </div>
@@ -52,7 +57,7 @@ class Dropdown extends React.Component {
 class CategoryList extends React.Component{
     render() {
         return(
-            <a className="dropdown-item" href={"/home?category=" + this.props.data.name}>
+            <a className="dropdown-item" href={this.props.link + this.props.data.name}>
                 {this.props.data.name}
             </a>
         );

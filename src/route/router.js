@@ -17,6 +17,7 @@ import CategoryList from "../component/category/CategoryList";
 import NewPosting from "../component/blog/NewPosting";
 import BlogApproval from "../component/blog/BlogApproval";
 import Reporting from "../component/reporting/Reporting";
+import MyPostingPage from "../component/blog/MyPostingPage";
 
 function AppRouter() {
     return (
@@ -40,6 +41,7 @@ function AppRouter() {
                     <Route path="/blog" exact component = {Blog} />
                     <AuthenticatedRoute path="/user/list" exact component={UserList} />
                     <AuthenticatedRoute path="/blog/create" exact component={CreateBlog} />
+                    <AuthenticatedRoute path="/blog/mypost" exact component = {MyPostingPage} />
                 </Switch>
             </Router>
         </div>

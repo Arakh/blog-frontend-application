@@ -167,15 +167,22 @@ class ProxyServices {
 
     }
 
-    getBlogByKeyWord(keyword){
+    getBlogByKeyWord(keyword, pagenumber){
 
         let token = this.getToken();
         console.log("TOKEN SERVICE:", token);
         axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
         console.log("Header:", axios.defaults.headers.common);
 
-        /* return axios.get(`${API_URL}/services/blog/api/posts`);*/
-        return axios.get(`${API_URL2}/api/posts/search?keyword=${keyword}` );
+        if(pagenumber){
+            return axios.get(`${API_URL2}/api/posts/search?keyword=${keyword}&page=${pagenumber}&size=6` );
+        }else{
+            return axios.get(`${API_URL2}/api/posts/search?keyword=${keyword}&page=0&size=6` );
+        }
+
+
+
+
 
     }
 
