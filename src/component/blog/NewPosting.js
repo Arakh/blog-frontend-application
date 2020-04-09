@@ -100,7 +100,7 @@ class NewPosting extends React.Component{
                                         <a id="new-posting" className="nav-link" href="/blog/new"><b>New Posting</b></a>
                                     </li>
                                     <li className="nav-item">
-                                        <a id="my-posting" className="nav-link" href="/blog/my"><b>My Posting</b></a>
+                                        <a id="my-posting" className="nav-link" href="/blog/mypost"><b>My Posting</b></a>
                                     </li>
                                 </ul>
                                 <form className="form-inline my-2 my-lg-0">
