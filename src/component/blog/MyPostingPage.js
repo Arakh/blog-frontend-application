@@ -116,7 +116,7 @@ class MyPostingPage extends React.Component{
     render() {
         return(
             <div style={{marginTop:'10px'}}>
-                <div style={{textAlign: 'center'}}>MY POSTING PAGE</div>
+                <div style={{textAlign: 'center'}}><b>MY POSTING PAGE</b></div>
                 <div className="row" style={{marginLeft:'20px', marginRight:'20px'}}>
                     <div className="col-md-12">
                         <nav className="navbar navbar-expand-lg navbar-light bg-light">
