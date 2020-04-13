@@ -188,7 +188,9 @@ class BlogData extends React.Component{
         let approvedBlog;
         approvedBlog = (
             <div className="jumbotron" style={{height:'600px'}}>
-                <h3>{this.props.data.title}</h3>
+                <p><h3>{this.props.data.title}</h3>
+                <h5>Created by: Someone</h5>
+                <h5>{this.props.data.createdDate}</h5></p>
                 <p className="lead">{this.props.data.summary}</p>
                 <p className="lead">
                     <a className="btn btn-primary btn-lg" href={"/blog?title=" + this.props.data.title} role="button">Read more</a>
