@@ -36,6 +36,19 @@ class ProxyServices {
         localStorage.setItem(TOKEN, token)
         localStorage.setItem(USER_NAME_SESSION_ATTRIBUTE_NAME, username)
         localStorage.setItem(PASSWORD_SESSION_ATTRIBUTE_NAME, password)
+
+        this.getUserData(username)
+            .then(response => response.data)
+            .then((json) => {
+                console.log("Response:", JSON.stringify(json));
+                localStorage.setItem("id", json.data.data.id);
+                localStorage.setItem("firstname", json.data.data.firstname);
+                localStorage.setItem("lastname", json.data.data.lastname);
+                console.log("LASTNAME:", json.data.data.lastname);
+            }).catch(() => {
+        });
+
+
     }
 
 
@@ -303,6 +316,16 @@ class ProxyServices {
         }
 
         return axios.get(`${API_URL2}/api/post-by-username`+"?username="+username+"&page="+(pageNumber)+"&size=6");
+
+    }
+
+    getUserData(username){
+        let token = this.getToken();
+        console.log("TOKEN SERVICE:", token);
+        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
+        console.log("Header:", axios.defaults.headers.common);
+
+        return axios.get(`${API_URL}/api/find-user-by-username/`+username);
 
     }
 
