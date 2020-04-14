@@ -291,6 +291,21 @@ class ProxyServices {
         return axios.get(`${API_URL_APPROVAL}/api/approval-statistic-v2` );
     }
 
+    getPostingByUsername(pageNumber, username, category){
+
+        let token = this.getToken();
+        console.log("TOKEN SERVICE:", token);
+        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
+        console.log("Header:", axios.defaults.headers.common);
+
+        if(category){
+            return axios.get(`${API_URL2}/api/post-by-username`+"?username="+username+"&page="+(pageNumber)+"&size=6");
+        }
+
+        return axios.get(`${API_URL2}/api/post-by-username`+"?username="+username+"&page="+(pageNumber)+"&size=6");
+
+    }
+
 }
 
 export default new ProxyServices()

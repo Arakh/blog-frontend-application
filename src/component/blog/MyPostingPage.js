@@ -35,7 +35,7 @@ class MyPostingPage extends React.Component{
         if(this.state.keyword){
             this.searchByKeyword(this.state.keyword, pageNumber);
         }else{
-            this.getMyPosting(this.state.category,pageNumber);
+            this.getMyPosting(pageNumber, localStorage.getItem('authenticatedUser'), this.state.category);
         }
     }
 
@@ -77,22 +77,21 @@ class MyPostingPage extends React.Component{
         console.log("PARAMS:",params.category);
 
         this.setState({username: localStorage.getItem('authenticatedUser')});
-        console.log("Username:", this.state.username);
+        console.log("Username:", localStorage.getItem('authenticatedUser'));
 
         this.setState({category: params.category});
         this.setState({keyword: ''});
 
         if(params.category){
-            this.getMyPosting(params.category,0);
+            this.getMyPosting(0, localStorage.getItem('authenticatedUser'), params.category);
         }else {
-            this.getMyPosting('',0);
+            this.getMyPosting(0,localStorage.getItem('authenticatedUser'),'');
         }
 
     }
 
-    getMyPosting(category, pageNumber){
-        //ProxyServices.getTodayPosting(pageNumber)
-          ProxyServices.getBlogList(category, pageNumber-1)
+    getMyPosting(pageNumber, username, category){
+          ProxyServices.getPostingByUsername(pageNumber,username, category)
             .then(response => response.data)
             .then((json) => {
                 console.log("Response:", JSON.stringify(json));
@@ -189,7 +188,7 @@ class BlogData extends React.Component{
         approvedBlog = (
             <div className="jumbotron" style={{height:'600px'}}>
                 <p><h3>{this.props.data.title}</h3>
-                <h5>Created by: Someone</h5>
+                <h5>Created by: {this.props.data.user.username}</h5>
                 <h5>{this.props.data.createdDate}</h5></p>
                 <p className="lead">{this.props.data.summary}</p>
                 <p className="lead">
