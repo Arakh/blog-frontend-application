@@ -118,13 +118,24 @@ class Main extends React.Component{
         console.log("Content:",contentToSave);
 
         if(this.state.title != "" && this.state.category !== "" && this.state.content !== ""){
+
+            let user = {
+                firstname: localStorage.getItem("firstname"),
+                id: localStorage.getItem("id"),
+                lastname: localStorage.getItem("lastname"),
+                username: localStorage.getItem("authenticatedUser")
+            };
+
             let payload = {
                 categoryId: this.state.categoryId,
                 categoryName: this.state.category,
                 content: this.state.content,
                 summary: this.state.contentText.substr(0,250),
                 title: this.state.title,
+                user: user
             }
+
+            console.log("PAYLOAD:", payload);
 
             ProxyServices.submitBlog(payload)
                 .then(response => response.data)

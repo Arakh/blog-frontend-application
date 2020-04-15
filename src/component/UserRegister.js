@@ -54,6 +54,7 @@ class UserRegister extends React.Component{
                 lastname: this.state.lastname,
                 password: this.state.password,
                 email: this.state.email,
+                enabled: true,
                 roles: ['ROLE_USER'],
             };
 

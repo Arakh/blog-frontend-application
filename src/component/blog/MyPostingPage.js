@@ -7,7 +7,7 @@ import Editor from "draft-js-plugins-editor";
 import { mediaBlockRenderer } from "./MediaBlockrenderer";
 import Pagination from 'react-js-pagination';
 
-class NewPosting extends React.Component{
+class MyPostingPage extends React.Component{
 
     constructor(props){
         super(props);
@@ -15,19 +15,28 @@ class NewPosting extends React.Component{
             blogs: [],
             keyword: '',
             editorState: EditorState.createEmpty(),
-            activePage: 1
+            activePage: 1,
+            category: '',
+            username: ''
         }
+
         this.onSearchChange = this.onSearchChange.bind(this);
         this.onSubmitSearch = this.onSubmitSearch.bind(this);
         this.handlePageChange = this.handlePageChange.bind(this);
-        this.getTodayPosting = this.getTodayPosting.bind(this);
+        this.getMyPosting = this.getMyPosting.bind(this);
+        this.searchByKeyword = this.searchByKeyword.bind(this);
     }
 
     handlePageChange(pageNumber) {
         console.log(`active page is ${pageNumber}`);
         this.setState({activePage: pageNumber});
-        this.getTodayPosting(pageNumber);
+        console.log("CATEGORY:",this.state.category);
 
+        if(this.state.keyword){
+            this.searchByKeyword(this.state.keyword, pageNumber);
+        }else{
+            this.getMyPosting(pageNumber, localStorage.getItem('authenticatedUser'), this.state.category);
+        }
     }
 
     onChange = (editorState) => {
@@ -48,8 +57,12 @@ class NewPosting extends React.Component{
     onSubmitSearch(event){
         event.preventDefault();
         console.log("Find blog by keyword");
+        this.searchByKeyword(this.state.keyword);
 
-        ProxyServices.getBlogByKeyWord(this.state.keyword)
+    }
+
+    searchByKeyword(keyword, pagenumber){
+        ProxyServices.getBlogByKeyWord(keyword, pagenumber-1)
             .then(response => response.data)
             .then((json) => {
                 console.log("Response:", JSON.stringify(json));
@@ -60,11 +73,25 @@ class NewPosting extends React.Component{
     }
 
     componentDidMount() {
-        this.getTodayPosting(1);
+        let params = queryString.parse(this.props.location.search);
+        console.log("PARAMS:",params.category);
+
+        this.setState({username: localStorage.getItem('authenticatedUser')});
+        console.log("Username:", localStorage.getItem('authenticatedUser'));
+
+        this.setState({category: params.category});
+        this.setState({keyword: ''});
+
+        if(params.category){
+            this.getMyPosting(0, localStorage.getItem('authenticatedUser'), params.category);
+        }else {
+            this.getMyPosting(0,localStorage.getItem('authenticatedUser'),'');
+        }
+
     }
 
-    getTodayPosting(pageNumber){
-        ProxyServices.getTodayPosting(pageNumber)
+    getMyPosting(pageNumber, username, category){
+          ProxyServices.getPostingByUsername(pageNumber,username, category)
             .then(response => response.data)
             .then((json) => {
                 console.log("Response:", JSON.stringify(json));
@@ -88,13 +115,14 @@ class NewPosting extends React.Component{
     render() {
         return(
             <div style={{marginTop:'10px'}}>
+                <div style={{textAlign: 'center'}}><b>MY POSTING PAGE</b></div>
                 <div className="row" style={{marginLeft:'20px', marginRight:'20px'}}>
                     <div className="col-md-12">
                         <nav className="navbar navbar-expand-lg navbar-light bg-light">
                             <div className="collapse navbar-collapse" id="navbarSupportedContent">
                                 <ul className="navbar-nav mr-auto">
                                     <li id="category-dropdown" className="nav-item active">
-                                        <Dropdown/>
+                                        <Dropdown link="/blog/mypost?category="/>
                                     </li>
                                     <li className="nav-item">
                                         <a id="new-posting" className="nav-link" href="/blog/new"><b>New Posting</b></a>
@@ -103,6 +131,7 @@ class NewPosting extends React.Component{
                                         <a id="my-posting" className="nav-link" href="/blog/mypost"><b>My Posting</b></a>
                                     </li>
                                 </ul>
+
                                 <form className="form-inline my-2 my-lg-0">
                                     <input className="form-control mr-sm-2" type="search" placeholder="Search" onChange={this.onSearchChange}
                                            aria-label="Search"/>
@@ -113,8 +142,6 @@ class NewPosting extends React.Component{
                     </div>
                 </div>
                 <div id="data" className="row" style={{marginLeft:'30px', marginRight:'30px'}}>
-                   {/* {this.state.blogs.map((data, i) => <BlogData key = {i} data = {data} />)}
-                    {console.log(this.state.blogs)}*/}
                     {this.state.blogs.map((data, i) => <BlogData key = {i} data = {data} editor={this.state.editorState} onChange={this.onEditorChange} blockRendererFn={mediaBlockRenderer} plugins={this.plugins} />)}
                     {console.log(this.state.blogs)}
                 </div>
@@ -160,7 +187,9 @@ class BlogData extends React.Component{
         let approvedBlog;
         approvedBlog = (
             <div className="jumbotron" style={{height:'600px'}}>
-                <h3>{this.props.data.title}</h3>
+                <p><h3>{this.props.data.title}</h3>
+                <h5>Created by: {this.props.data.user.username}</h5>
+                <h5>{this.props.data.createdDate}</h5></p>
                 <p className="lead">{this.props.data.summary}</p>
                 <p className="lead">
                     <a className="btn btn-primary btn-lg" href={"/blog?title=" + this.props.data.title} role="button">Read more</a>
@@ -179,4 +208,5 @@ class BlogData extends React.Component{
     }
 }
 
-export default NewPosting;
+
+export default MyPostingPage;
