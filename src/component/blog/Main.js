@@ -130,7 +130,7 @@ class Main extends React.Component{
                 categoryId: this.state.categoryId,
                 categoryName: this.state.category,
                 content: this.state.content,
-                summary: this.state.contentText.substr(0,250),
+                summary: this.state.contentText,
                 title: this.state.title,
                 user: user
             }
