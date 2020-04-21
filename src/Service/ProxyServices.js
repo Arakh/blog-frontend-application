@@ -319,6 +319,21 @@ class ProxyServices {
 
     }
 
+    getPostingByUsernameAndKeyword(pageNumber, username, keyword){
+
+        let token = this.getToken();
+        console.log("TOKEN SERVICE:", token);
+        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
+        console.log("Header:", axios.defaults.headers.common);
+
+        if(keyword){
+            return axios.get(`${API_URL2}/api/post-by-username-and-keyword`+"?username="+username+"&keyword="+keyword+"&page="+(pageNumber)+"&size=6");
+        }
+
+        return axios.get(`${API_URL2}/api/post-by-username`+"?username="+username+"&page="+(pageNumber)+"&size=6");
+
+    }
+
     getUserData(username){
         let token = this.getToken();
         console.log("TOKEN SERVICE:", token);
