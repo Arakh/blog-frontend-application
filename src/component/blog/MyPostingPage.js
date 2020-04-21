@@ -24,18 +24,18 @@ class MyPostingPage extends React.Component{
         this.onSubmitSearch = this.onSubmitSearch.bind(this);
         this.handlePageChange = this.handlePageChange.bind(this);
         this.getMyPosting = this.getMyPosting.bind(this);
-        this.searchByKeyword = this.searchByKeyword.bind(this);
+        this.searchByUsernameAndKeyword = this.searchByUsernameAndKeyword.bind(this);
     }
 
     handlePageChange(pageNumber) {
-        console.log(`active page is ${pageNumber}`);
+        console.log(`active page is ${pageNumber-1}`);
         this.setState({activePage: pageNumber});
         console.log("CATEGORY:",this.state.category);
 
         if(this.state.keyword){
-            this.searchByKeyword(this.state.keyword, pageNumber);
+            this.searchByUsernameAndKeyword(pageNumber-1, localStorage.getItem('authenticatedUser'), this.state.keyword);
         }else{
-            this.getMyPosting(pageNumber, localStorage.getItem('authenticatedUser'), this.state.category);
+            this.getMyPosting(pageNumber-1, localStorage.getItem('authenticatedUser'), this.state.category);
         }
     }
 
@@ -57,12 +57,12 @@ class MyPostingPage extends React.Component{
     onSubmitSearch(event){
         event.preventDefault();
         console.log("Find blog by keyword");
-        this.searchByKeyword(this.state.keyword);
+        this.searchByUsernameAndKeyword(0, localStorage.getItem('authenticatedUser'), this.state.keyword);
 
     }
 
-    searchByKeyword(keyword, pagenumber){
-        ProxyServices.getBlogByKeyWord(keyword, pagenumber-1)
+    searchByUsernameAndKeyword(pageNumber, username, keyword){
+        ProxyServices.getPostingByUsernameAndKeyword(pageNumber, username, keyword)
             .then(response => response.data)
             .then((json) => {
                 console.log("Response:", JSON.stringify(json));
