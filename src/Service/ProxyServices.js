@@ -344,6 +344,15 @@ class ProxyServices {
 
     }
 
+    deleteUser(username){
+        let token = this.getToken();
+        console.log("TOKEN SERVICE:", token);
+        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
+        console.log("Header:", axios.defaults.headers.common);
+
+        return axios.delete(`${API_URL}/api/delete/user/`+username);
+    }
+
 }
 
 export default new ProxyServices()
