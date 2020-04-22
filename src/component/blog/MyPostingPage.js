@@ -91,7 +91,7 @@ class MyPostingPage extends React.Component{
     }
 
     getMyPosting(pageNumber, username, category){
-          ProxyServices.getPostingByUsername(pageNumber,username, category)
+        ProxyServices.getPostingByUsername(pageNumber,username, category)
             .then(response => response.data)
             .then((json) => {
                 console.log("Response:", JSON.stringify(json));
@@ -188,8 +188,8 @@ class BlogData extends React.Component{
         approvedBlog = (
             <div className="jumbotron" style={{height:'600px'}}>
                 <p><h3>{this.props.data.title}</h3>
-                <h5>Created by: {this.props.data.user.username}</h5>
-                <h5>{this.props.data.createdDate}</h5></p>
+                    <h5>Created by: {this.props.data.user.username}</h5>
+                    <h5>{this.props.data.createdDate}</h5></p>
                 <p className="lead">{this.props.data.summary}</p>
                 <p className="lead">
                     <a className="btn btn-primary btn-lg" href={"/blog?title=" + this.props.data.title} role="button">Read more</a>

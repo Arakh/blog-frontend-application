@@ -312,7 +312,7 @@ class ProxyServices {
         console.log("Header:", axios.defaults.headers.common);
 
         if(category){
-            return axios.get(`${API_URL2}/api/post-by-username`+"?username="+username+"&page="+(pageNumber)+"&size=6");
+            return axios.get(`${API_URL2}/api/post-by-username-and-category`+"?username="+username+"&category="+category+"&page="+(pageNumber)+"&size=6");
         }
 
         return axios.get(`${API_URL2}/api/post-by-username`+"?username="+username+"&page="+(pageNumber)+"&size=6");
