@@ -56,24 +56,39 @@ class UserList extends React.Component{
 
 class TableRow extends React.Component{
 
-	deleteConfirmation = () => {
-		confirmAlert({
-		  title: 'Confirm to delete',
-		  message: 'Are you sure want to delete this?',
-		  buttons: [
-			{
-			  label: 'Yes',
-			  onClick: () => alert('Click Yes')
-			},
-			{
-			  label: 'No',
-			  onClick: () => alert('Click No')
-			}
-		  ]
-		});
-	  };
+	constructor(props){
+		super(props);
+		this.onDeleteConfirmation = this.onDeleteConfirmation.bind(this);
+	}
 
-	  render() {
+	onDeleteConfirmation() {
+		const user = this.props.data;
+		confirmAlert({
+			title: 'Confirm to delete',
+			message: 'Are you sure want to delete '+user.username+'?',
+			buttons: [
+				{
+					label: 'Yes',
+					onClick: () => this.deleteUser(user.username),
+				},
+				{
+					label: 'No',
+				}
+		  	]
+		});
+	};
+
+	deleteUser(username) {
+		AuthenticationService.deleteUser(username)
+			.then(response => response.data)
+			.then((json) => {
+				console.log("Response:", JSON.stringify(json));
+			}).catch((error) => {
+				console.log("Error:", error);
+			});
+	};
+
+	render() {
 		return (
 			<tr>
 				<td>{this.props.data.username}</td>
@@ -82,7 +97,7 @@ class TableRow extends React.Component{
 				<td>{this.props.data.roles}</td>
 				<td>{JSON.stringify(this.props.data.enabled)}</td>
 				<td><Link to={'/user/edit/'+this.props.data.username} className="btn btn-info" >Edit</Link></td>
-				<td><button className="btn btn-info" onClick={this.deleteConfirmation}>Delete</button></td>
+				<td><button className="btn btn-info" onClick={this.onDeleteConfirmation}>Delete</button></td>
 			</tr>
 		);
 	}
