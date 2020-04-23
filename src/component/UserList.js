@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import AuthenticationService from "../Service/ProxyServices";
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import { withAlert } from 'react-alert'
 
 class UserList extends React.Component{
 
@@ -11,7 +12,45 @@ class UserList extends React.Component{
 		this.state = {
 			users : [],
 		}
+
+		this.onDeleteConfirmation = this.onDeleteConfirmation.bind(this);
+
 	}
+
+	onDeleteConfirmation(username) {
+
+		confirmAlert({
+			title: 'Confirm to delete',
+			message: 'Are you sure want to delete '+username+'?',
+			buttons: [
+				{
+					label: 'Yes',
+					onClick: () => this.deleteUser(username),
+				},
+				{
+					label: 'No',
+				}
+		  	]
+		});
+	};
+
+	deleteUser(username) {
+		const alert = this.props.alert;
+
+		AuthenticationService.deleteUser(null)
+			.then(response => response.data)
+			.then((json) => {
+				const remainUsers = this.state.users.filter(user => user.username != username);
+				this.setState({users: remainUsers});
+				if (json.data.status) {
+					alert.success(json.data.message);
+				} else {
+					alert.error(json.data.message);
+				}
+			}).catch((error) => {
+				alert.error(error.message);
+			});
+	};
 
 	componentDidMount(){
 		console.log('Component DID MOUNT!');
@@ -35,15 +74,13 @@ class UserList extends React.Component{
 							<tbody>
 							<tr>
 								<th>USERNAME</th>
-								{/*<th>PASSWORD</th>*/}
 								<th>EMAIL</th>
 								<th>ROLE</th>
 								<th>STATUS</th>
 								<th></th>
 								<th></th>
 							</tr>
-							{this.state.users.map((data, i) => <TableRow key = {i} data = {data} />)}
-							{console.log(this.state.users)}
+							{this.state.users.map((data, i) => <TableRow key = {i} data = {data} onDeleteConfirmation = {this.onDeleteConfirmation} />)}
 							</tbody>
 						</table>
 					</div>
@@ -54,53 +91,18 @@ class UserList extends React.Component{
 
 }
 
-class TableRow extends React.Component{
+const TableRow = (props) => {
 
-	constructor(props){
-		super(props);
-		this.onDeleteConfirmation = this.onDeleteConfirmation.bind(this);
-	}
-
-	onDeleteConfirmation() {
-		const user = this.props.data;
-		confirmAlert({
-			title: 'Confirm to delete',
-			message: 'Are you sure want to delete '+user.username+'?',
-			buttons: [
-				{
-					label: 'Yes',
-					onClick: () => this.deleteUser(user.username),
-				},
-				{
-					label: 'No',
-				}
-		  	]
-		});
-	};
-
-	deleteUser(username) {
-		AuthenticationService.deleteUser(username)
-			.then(response => response.data)
-			.then((json) => {
-				console.log("Response:", JSON.stringify(json));
-			}).catch((error) => {
-				console.log("Error:", error);
-			});
-	};
-
-	render() {
-		return (
-			<tr>
-				<td>{this.props.data.username}</td>
-				{/*<td>{this.props.data.password}</td>*/}
-				<td>{this.props.data.email}</td>
-				<td>{this.props.data.roles}</td>
-				<td>{JSON.stringify(this.props.data.enabled)}</td>
-				<td><Link to={'/user/edit/'+this.props.data.username} className="btn btn-info" >Edit</Link></td>
-				<td><button className="btn btn-info" onClick={this.onDeleteConfirmation}>Delete</button></td>
-			</tr>
-		);
-	}
+	return (
+		<tr>
+			<td>{props.data.username}</td>
+			<td>{props.data.email}</td>
+			<td>{props.data.roles}</td>
+			<td>{JSON.stringify(props.data.enabled)}</td>
+			<td><Link to={'/user/edit/'+props.data.username} className="btn btn-info" >Edit</Link></td>
+			<td><button className="btn btn-info" onClick={() => props.onDeleteConfirmation(props.data.username)}>Delete</button></td>
+		</tr>
+	);
 }
 
-export default UserList;
+export default withAlert()(UserList);
