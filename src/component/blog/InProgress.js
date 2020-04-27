@@ -1,64 +1,50 @@
 import React, {Component} from 'react';
 import ProxyServices from "../../Service/ProxyServices";
 
-class InProgress extends Component{
+class InProgress extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state ={
-            approval: []
-        }
-    }
+	constructor(props) {
+		super(props);
+		this.state ={
+			approval: []
+		}
+	}
 
-   /* componentDidMount() {
-        this.setState({approval: this.props.inprogress})
-    }
+	render() {
 
-    componentWillReceiveProps(nextProps, nextContext) {
-        this.setState({approval: nextProps})
-    }*/
+		let blog;
 
-    render() {
+		blog = this.props.inprogress.map((data, i) => <BlogInProgress key = {i} data = {data} />)
 
-        let blog;
-
-        blog = this.props.inprogress.map((data, i) => <BlogInProgress key = {i} data = {data} />)
-
-        /*if(this.state.approval.summary){
-            blog = this.state.approval.map((data, i) => <BlogInProgress key = {i} data = {data} />)
-        }else{
-            blog = this.props.inprogress.map((data, i) => <BlogInProgress key = {i} data = {data} />)
-        }*/
-
-        return (
-            <div>
-                {blog}
-            </div>
-        );
-    }
+		return (
+			<div>
+				{blog}
+			</div>
+		);
+	}
 
 }
 
 export default InProgress;
 
-class BlogInProgress extends Component{
+class BlogInProgress extends Component {
 
-    render() {
-        return (
-            <div>
-                <div className="card">
-                    <div className="card-header bg-secondary text-white">{this.props.data.title}</div>
-                    <div className="card-body">
-                        <p>{this.props.data.createdDate}</p>
-                        <p>{this.props.data.summary}......<a href={"/blog?title="+this.props.data.title}>Read More..</a></p>
+	render() {
+		return (
+			<div>
+				<div className="card">
+					<div className="card-header bg-secondary text-white">{this.props.data.title}</div>
+					<div className="card-body">
+						<p>{this.props.data.createdDate}</p>
+						<p>{this.props.data.summary}......<a href={"/blog?title="+this.props.data.title}>Read More..</a></p>
 
-                        <a className="btn btn-secondary" href={"/blog/approval?id="+this.props.data.id+'&status=Approved&progress=Done'} role="button">Approve</a>
-                        <a className="btn btn-secondary" style={{marginLeft: '10px'}} href={"/blog/approval?id="+this.props.data.id+'&status=Rejected'+'&progress=Done'} role="button">Reject</a>
-                    </div>
-                </div>
-                <hr/>
-            </div>
-        );
-    }
+						<a className="btn btn-secondary" href={"/blog/approval?id="+this.props.data.id+'&status=Approved&progress=Done'} role="button">Approve</a>
+						<a className="btn btn-secondary" style={{marginLeft: '10px'}} href={"/blog/approval?id="+this.props.data.id+'&status=Rejected'+'&progress=Done'} role="button">Reject</a>
+					</div>
+				</div>
+				<hr/>
+			</div>
+		);
+	}
 
 }

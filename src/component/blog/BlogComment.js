@@ -11,7 +11,7 @@ export const USER_NAME_SESSION_ATTRIBUTE_NAME = 'authenticatedUser';
 
 class BlogComment extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -36,8 +36,6 @@ class BlogComment extends React.Component {
 
     componentDidMount() {
         this.setState({blogId: this.props.id, blogTitle: this.props.title});
-        console.log("BLOG ID - COMMENT: did mount", this.state.blogId);
-        console.log("BLOG Title - COMMENT: did mount", this.state.blogTitle);
     }
 
 
@@ -91,14 +89,13 @@ class BlogComment extends React.Component {
         );
     };
 
-    onEditorChange(editorState){
-        console.log("TEXT:", this.state.editorState.getCurrentContent().getPlainText());
+    onEditorChange(editorState) {
         this.setState({editorState, comment: this.state.editorState.getCurrentContent().getPlainText()});
     }
 
-    onSubmitComment(){
+    onSubmitComment() {
 
-        if(this.state.comment){
+        if (this.state.comment) {
             let payload = {
                 comment: this.state.comment,
                 postId: this.props.id,
@@ -109,7 +106,6 @@ class BlogComment extends React.Component {
             ProxyServices.submitComment(payload)
                 .then(response => response.data)
                 .then((json) => {
-                    console.log("Response:", JSON.stringify(json));
                     this.setState({editorState: EditorState.createEmpty()});
                     this.props.history.push("/blog?title="+this.props.title);
                 }).catch(() => {
@@ -119,9 +115,6 @@ class BlogComment extends React.Component {
     }
 
     render() {
-        console.log("Comment-blog id:", this.props.id );
-        console.log("Comment-blog title:", this.props.title);
-
         return(
             <div className="editorContainer">
                 <div className="card">
