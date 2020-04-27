@@ -5,9 +5,9 @@ import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { withAlert } from 'react-alert'
 
-class UserList extends React.Component{
+class UserList extends React.Component {
 
-	constructor(props){
+	constructor(props) {
 		super(props);
 		this.state = {
 			users : [],
@@ -52,13 +52,10 @@ class UserList extends React.Component{
 			});
 	};
 
-	componentDidMount(){
-		console.log('Component DID MOUNT!');
-		console.log("Username:", localStorage.getItem("authenticatedUser"));
+	componentDidMount() {
 		AuthenticationService.getUserList()
 			.then(response => response.data)
 			.then((json)=>{
-				console.log("Response User List:", JSON.stringify(json.data.data));
 				this.setState({users: json.data.data})
 			}).catch((error)=>{
 				console.log("Error:", error);

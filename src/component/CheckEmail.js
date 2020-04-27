@@ -1,6 +1,6 @@
 import React from 'react'
 
-class CheckEmail extends React.Component{
+class CheckEmail extends React.Component {
 
     constructor(props) {
         super(props);
