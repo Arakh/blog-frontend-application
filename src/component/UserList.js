@@ -37,12 +37,12 @@ class UserList extends React.Component{
 	deleteUser(username) {
 		const alert = this.props.alert;
 
-		AuthenticationService.deleteUser(null)
+		AuthenticationService.deleteUser(username)
 			.then(response => response.data)
 			.then((json) => {
-				const remainUsers = this.state.users.filter(user => user.username != username);
-				this.setState({users: remainUsers});
-				if (json.data.status) {
+				if (json.data.success) {
+					const remainUsers = this.state.users.filter(user => user.username != username);
+					this.setState({users: remainUsers});
 					alert.success(json.data.message);
 				} else {
 					alert.error(json.data.message);
