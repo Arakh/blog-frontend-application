@@ -1,5 +1,5 @@
 import React from 'react';
-import Dropdown from '../component/dropdownmenu/CategoryDropdown';
+import Dropdown from './dropdownmenu/CategoryDropdown';
 import ProxyServices from "../Service/ProxyServices";
 import { withRouter } from 'react-router-dom';
 import queryString from 'query-string';
@@ -10,7 +10,7 @@ import Pagination from 'react-js-pagination';
 import ReactDOM from "react-dom";
 
 
-class Index extends React.Component{
+class Index extends React.Component {
 
     constructor(props){
         super(props);
@@ -28,7 +28,6 @@ class Index extends React.Component{
     }
 
     handlePageChange(pageNumber) {
-        console.log(`active page is ${pageNumber}`);
         this.setState({activePage: pageNumber});
 
         this.fetchBlogData("", pageNumber)
@@ -73,7 +72,7 @@ class Index extends React.Component{
                     console.log("BLOGS:", (this.state.blogs));
                 }).catch(() => {
             })
-        }else{
+        } else{
             ProxyServices.getBlogList("", page-1)
                 .then(response => response.data)
                 .then((json) => {
@@ -99,7 +98,7 @@ class Index extends React.Component{
                     console.log("BLOGS:", (this.state.blogs));
                 }).catch(() => {
             })
-        }else{
+        } else{
             ProxyServices.getBlogList("")
                 .then(response => response.data)
                 .then((json) => {
@@ -165,7 +164,7 @@ class Index extends React.Component{
 
 export default withRouter(Index);
 
-class BlogData extends React.Component{
+class BlogData extends React.Component {
 
     constructor(props){
         super(props);
