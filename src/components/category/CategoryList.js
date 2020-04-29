@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import AuthenticationService from "../../Service/ProxyServices";
+import HeaderMenu from "../../components/HeaderMenu";
 
 class CategoryList extends React.Component {
 
@@ -22,21 +23,24 @@ class CategoryList extends React.Component {
 
 	render() {
 		return(
-			<div className="container" style={{marginTop:'100px'}}>
-				<div className="row">
-					<div className="card">
-						<table id="categorylist" className="table table-striped">
-							<tbody>
-							<tr>
-								<th>ID</th>
-								<th>NAME</th>
-								<th>DESCRIPTION</th>
-								<th></th>
-								<th></th>
-							</tr>
-							{this.state.categories.map((data, i) => <TableRow key = {i} data = {data} />)}
-							</tbody>
-						</table>
+			<div>
+				<HeaderMenu />
+				<div className="container" style={{marginTop:'100px'}}>
+					<div className="row">
+						<div className="card">
+							<table id="categorylist" className="table table-striped">
+								<tbody>
+								<tr>
+									<th>ID</th>
+									<th>NAME</th>
+									<th>DESCRIPTION</th>
+									<th></th>
+									<th></th>
+								</tr>
+								{this.state.categories.map((data, i) => <TableRow key = {i} data = {data} />)}
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>

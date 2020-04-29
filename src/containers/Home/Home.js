@@ -1,6 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import PostList from "../../components/Posts/PostList";
+import HeaderMenu from "../../components/HeaderMenu";
 
 class Home extends React.Component {
 
@@ -11,6 +12,7 @@ class Home extends React.Component {
 	render() {
 		return (
 			<div>
+				<HeaderMenu />
 				<PostList link="/home?category="
 					location={this.props.location}
 					source="Home"

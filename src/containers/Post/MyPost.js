@@ -1,6 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import PostList from "../../components/Posts/PostList";
+import HeaderMenu from "../../components/HeaderMenu";
 
 class MyPost extends React.Component {
 
@@ -11,6 +12,7 @@ class MyPost extends React.Component {
 	render() {
 		return (
 			<div>
+				<HeaderMenu />
 				<PostList link="/blog/mypost?category="
 					location={this.props.location}
 					author={localStorage.getItem('authenticatedUser')}

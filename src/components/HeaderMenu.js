@@ -1,7 +1,5 @@
 import React from 'react';
 import AuthenticationService from "../Service/ProxyServices";
-import {Redirect} from "react-router-dom";
-import { withRouter } from 'react-router-dom';
 import { Navbar, NavDropdown, Nav } from 'react-bootstrap';
 
 import "./blog/css/style.css"
@@ -17,10 +15,11 @@ class HeaderMenu extends React.Component {
 	}
 
 	listOfMenu() {
-		if (AuthenticationService.isUserLoggedIn) {
+		if (AuthenticationService.isUserLoggedIn()) {
 			return (
 				<>
 					<Nav className="mr-auto">
+						<Nav.Link href="/Home">Home</Nav.Link>
 						<NavDropdown title="Post" id="post-nav-dropdown">
 							<NavDropdown.Item href="/blog/create">Create Post</NavDropdown.Item>
 							<NavDropdown.Item href="/blog/mypost">My Post</NavDropdown.Item>
@@ -40,10 +39,15 @@ class HeaderMenu extends React.Component {
 			);
 		} else {
 			return (
-				<Nav>
-					<Nav.Link href="/login">Login</Nav.Link>
-					<Nav.Link href="/user/register">Sign Up</Nav.Link>
-				</Nav>
+				<>
+					<Nav className="mr-auto">
+						<Nav.Link href="/Home">Home</Nav.Link>
+					</Nav>
+					<Nav>
+						<Nav.Link href="/login">Login</Nav.Link>
+						<Nav.Link href="/user/register">Sign Up</Nav.Link>
+					</Nav>
+				</>
 			);
 		}
 	}

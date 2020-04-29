@@ -1,5 +1,6 @@
-import React from 'react'
+import React from 'react';
 import ProxyServices from "../Service/ProxyServices";
+import HeaderMenu from "../components/HeaderMenu";
 
 class ResetPassword extends React.Component {
 
@@ -58,22 +59,25 @@ class ResetPassword extends React.Component {
 	render() {
 
 		return(
-			<div className="container" style={{marginTop:'100px'}}>
-				<div className="card">
-					<div className="card-header">Please Insert your email to reset your password!!!
-						<label className="btn btn-primary" value={this.state.message}>{this.state.message}</label>
-					</div>
-					<div className="card-body">
-						<div className="row">
-							<div className="col-md-4">
-								<input type="email" name="email" size="40" value={this.state.formControls.email.value} onChange={this.handleChange}/>
-							</div>
-							<div className="col-md-4">
-								<button className="btn btn-info" onClick={this.submit}>Submit</button>
+			<div>
+				<HeaderMenu />
+				<div className="container" style={{marginTop:'100px'}}>
+					<div className="card">
+						<div className="card-header">Please Insert your email to reset your password!!!
+							<label className="btn btn-primary" value={this.state.message}>{this.state.message}</label>
+						</div>
+						<div className="card-body">
+							<div className="row">
+								<div className="col-md-4">
+									<input type="email" name="email" size="40" value={this.state.formControls.email.value} onChange={this.handleChange}/>
+								</div>
+								<div className="col-md-4">
+									<button className="btn btn-info" onClick={this.submit}>Submit</button>
+								</div>
 							</div>
 						</div>
-					</div>
 
+					</div>
 				</div>
 			</div>
 		);

@@ -1,5 +1,6 @@
 import React from 'react'
 import ProxyServices from "../Service/ProxyServices";
+import HeaderMenu from "../components/HeaderMenu";
 
 class Logout extends React.Component {
 
@@ -18,6 +19,7 @@ class Logout extends React.Component {
 	render() {
 		return(
 				<div>
+					<HeaderMenu />
 					<h1>logout</h1>
 				</div>
 

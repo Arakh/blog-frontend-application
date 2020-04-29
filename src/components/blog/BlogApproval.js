@@ -12,6 +12,7 @@ import SockJsClient from 'react-stomp';
 import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import Pagination from 'react-js-pagination';
+import HeaderMenu from "../../components/HeaderMenu";
 
 class BlogApproval extends React.Component {
 
@@ -94,6 +95,7 @@ class BlogApproval extends React.Component {
 
 		return(
 			<div>
+				<HeaderMenu />
 				<div className="row justify-content-md-center" style={{marginTop:'20px', marginLeft: '10px', marginRight: '15px'}}>
 					<b>BLOG APPROVAL PROCESS [{this.state.message}]</b>
 					<NotificationContainer/>

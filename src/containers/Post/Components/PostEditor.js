@@ -1,12 +1,12 @@
 import React from 'react';
-import ProxyServices from '../../Service/ProxyServices';
-import axios from "axios";
 import { EditorState, RichUtils, AtomicBlockUtils, convertToRaw } from 'draft-js';
 import Editor from "draft-js-plugins-editor";
-import { mediaBlockRenderer } from "./MediaBlockrenderer";
-import { convertToHTML } from 'draft-convert';
+import { Alert, Form, Col, Row, Button } from "react-bootstrap";
 
-class Main extends React.Component {
+import ProxyServices from '../../../Service/ProxyServices';
+import { mediaBlockRenderer } from "../../../components/MediaBlockRenderer";
+
+class PostEditor extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -17,7 +17,6 @@ class Main extends React.Component {
 		this.state = {
 			blogs: [],
 			categories: [],
-			category: 'Enterprise Application Integration',
 			categoryId: 1,
 			title: '',
 			content: '',
@@ -30,7 +29,6 @@ class Main extends React.Component {
 		this.onCategoryOnChange = this.onCategoryOnChange.bind(this);
 		this.onSubmitBlog = this.onSubmitBlog.bind(this);
 		this.onTitleChange = this.onTitleChange.bind(this);
-		this.onContentChange = this.onContentChange.bind(this);
 		this.onEditorChange = this.onEditorChange.bind(this);
 	}
 
@@ -42,8 +40,6 @@ class Main extends React.Component {
 		}
 		return 'not-handled';
 	}
-
-	onURLChange = e => this.setState({ urlValue: e.target.value });
 
 	focus = () => this.refs.editor.focus();
 
@@ -103,7 +99,7 @@ class Main extends React.Component {
 	}
 
 	onSubmitBlog(event) {
-		if (this.state.title != "" && this.state.category !== "" && this.state.content !== "") {
+		if (this.state.title != "" && this.state.category !== "" && this.state.content !== "" && this.state.category !== undefined) {
 
 			let user = {
 				firstname: localStorage.getItem("firstname"),
@@ -139,97 +135,86 @@ class Main extends React.Component {
 		this.setState({title: event.target.value});
 	}
 
-	onContentChange(event) {
-		this.setState({content: event.target.value});
-	}
-
 	componentDidMount() {
+		const defaultCategory = {id:"", name:"-- Please select category --"};
 		ProxyServices.getCategoryList()
 			.then(response => response.data)
 			.then((json) => {
-				this.setState({categories: json});
+				this.setState({categories: [defaultCategory, ...json]});
 			}).catch(() => {
 		})
 	}
 
 	render() {
-
-		let data = this.state.categories;
+		let alertMessage;
+		if (this.state.message) {
+			alertMessage = <Alert variant="danger">{this.state.message}</Alert>;
+		}
 
 		return(
-			<div className="card">
-				<div className="card-header">
-					CREATE BLOG [{this.state.message}]
-				</div>
-				<div className="card-body">
-					<div className="row">
-						<div className="col-md-1">
-							Title:
-						</div>
-						<div className="col-md-7" style={{marginLeft:'0px'}}>
-							<input type="text" name="title" id="id" onChange={this.onTitleChange} placeholder="Please insert the blog title..." size="50"/>
-						</div>
-						<div className="col-md-4" style={{marginLeft:'0px'}}>
-						</div>
+			<div>
+				{alertMessage}
+				<div className="card">
+					<div className="card-header">
+						Create Post
 					</div>
-					<div className="row" style={{marginTop:'20px'}}>
-						<div className="col-md-1">
-							Category:
-						</div>
-						<div className="col-md-7" style={{marginLeft:'0px'}}>
-							{/*<Dropdown/>*/}
-							<select id="category" onChange={this.onCategoryOnChange}>
-							{this.state.categories.map((data, i) => <CategoryList key = {i} data = {data} />)}
-							</select>
-						</div>
-						<div className="col-md-4" style={{marginLeft:'0px'}}>
-						</div>
-					</div>
-					<div className="row" style={{marginTop:'20px'}}>
-						<div className="col-md-1">
-							Blog:
-						</div>
-						<div className="col-md-7" style={{marginLeft:'0px'}}>
-							<div className="menuButtons">
-								<button onClick={this.onUnderlineClick}>U</button>
-								<button onClick={this.onBoldClick}>
-									<b>B</b>
-								</button>
-								<button onClick={this.onItalicClick}>
-									<em>I</em>
-								</button>
-								<button className="inline styleButton" onClick={this.onAddImage}>
-									<i
-										className="material-icons"
-										style={{
-											fontSize: "16px",
-											textAlign: "center",
-											padding: "0px",
-											margin: "0px"
-										}}
-									>
-										image
-									</i>
-								</button>
+					<div className="card-body">
+						<Form>
+							<Form.Group as={Row} controlId="id">
+								<Form.Label column md="1">
+									Title
+								</Form.Label>
+								<Col md="11">
+									<Form.Control type="text" name="title" id="id" onChange={this.onTitleChange} placeholder="Post Title"/>
+								</Col>
+							</Form.Group>
+							<Form.Group as={Row} controlId="category">
+								<Form.Label column md="1">
+									Category
+								</Form.Label>
+								<Col md="11">
+									<Form.Control as="select" id="category" custom onChange={this.onCategoryOnChange}>
+										{this.state.categories.map((data, i) => <option key={i} value={data.id}>{data.name}</option>)}
+									</Form.Control>
+								</Col>
+							</Form.Group>
+							<Form.Group as={Row} controlId="PostEditor">
+								<Form.Label column md="1">
+									Content
+								</Form.Label>
+								<Col md="11">
+									<div className="menuButtons">
+										<Button variant="light" onClick={this.onUnderlineClick}>U</Button>
+										<Button variant="light" onClick={this.onBoldClick}>
+											<b>B</b>
+										</Button>
+										<Button variant="light" onClick={this.onItalicClick}>
+											<em>I</em>
+										</Button>
+										<Button variant="light" onClick={this.onAddImage}>Image</Button>
+									</div>
+
+									<Editor style={{ minHeight: '200px', overflow: 'auto'}}
+										editorState={this.state.editorState}
+										onChange={this.onEditorChange}
+										handleKeyCommand={this.handleKeyCommand}
+										blockRendererFn={mediaBlockRenderer}
+										plugins={this.plugins}
+										ref="editor"
+										id="PostEditor"
+									/>
+								</Col>
+							</Form.Group>
+							<div className="row" style={{marginTop:'20px'}}>
+								<div className="col-md-1">
+								</div>
+								<div className="col-md-7">
+									<Button id="createblog" onClick={this.onSubmitBlog}>Submit</Button>
+								</div>
+								<div className="col-md-4">
+								</div>
 							</div>
-
-							<Editor style = {{ maxHeight: '200px', overflow: 'auto'}} editorState={this.state.editorState} onChange={this.onEditorChange} handleKeyCommand={this.handleKeyCommand} blockRendererFn={mediaBlockRenderer}  plugins={this.plugins}
-										ref="editor"/>
-
-
-
-						</div>
-						<div className="col-md-4" style={{marginLeft:'0px'}}>
-						</div>
-					</div>
-					<div className="row" style={{marginTop:'20px'}}>
-						<div className="col-md-1">
-						</div>
-						<div className="col-md-7" style={{marginLeft:'0px'}}>
-							<button id="createblog" className="btn btn btn-primary" onClick={this.onSubmitBlog}>Submit</button>
-						</div>
-						<div className="col-md-4" style={{marginLeft:'0px'}}>
-						</div>
+						</Form>
 					</div>
 				</div>
 			</div>
@@ -237,13 +222,4 @@ class Main extends React.Component {
 	}
 }
 
-class CategoryList extends React.Component {
-	render() {
-		return(
-			<option value={this.props.data.id}>{this.props.data.name}</option>
-		);
-	}
-}
-
-export default Main;
-
+export default PostEditor;

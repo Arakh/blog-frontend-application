@@ -4,6 +4,7 @@ import AuthenticationService from "../Service/ProxyServices";
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { withAlert } from 'react-alert'
+import HeaderMenu from "../components/HeaderMenu";
 
 class UserList extends React.Component {
 
@@ -64,22 +65,25 @@ class UserList extends React.Component {
 
 	render() {
 		return(
-			<div className="container" style={{marginTop:'100px'}}>
-				<div>
-					<div className="card">
-						<table className="table table-striped">
-							<tbody>
-							<tr>
-								<th>USERNAME</th>
-								<th>EMAIL</th>
-								<th>ROLE</th>
-								<th>STATUS</th>
-								<th></th>
-								<th></th>
-							</tr>
-							{this.state.users.map((data, i) => <TableRow key = {i} data = {data} onDeleteConfirmation = {this.onDeleteConfirmation} />)}
-							</tbody>
-						</table>
+			<div>
+				<HeaderMenu />
+				<div className="container" style={{marginTop:'100px'}}>
+					<div>
+						<div className="card">
+							<table className="table table-striped">
+								<tbody>
+								<tr>
+									<th>USERNAME</th>
+									<th>EMAIL</th>
+									<th>ROLE</th>
+									<th>STATUS</th>
+									<th></th>
+									<th></th>
+								</tr>
+								{this.state.users.map((data, i) => <TableRow key = {i} data = {data} onDeleteConfirmation = {this.onDeleteConfirmation} />)}
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>

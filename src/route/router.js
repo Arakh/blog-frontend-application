@@ -9,22 +9,20 @@ import RegisterSuccess from '../components/RegisterSuccess'
 import RegisterFailed from '../components/RegisterFailed'
 import ResetPassword from "../components/ResetPassword";
 import CheckEmail from '../components/CheckEmail'
-import CreateBlog from "../components/blog/CreateBlog";
 import Blog from "../components/blog/Blog";
 import CreateCategory from "../components/category/CreateCategory";
 import CategoryList from "../components/category/CategoryList";
 import NewPosting from "../components/blog/NewPosting";
 import BlogApproval from "../components/blog/BlogApproval";
 import Reporting from "../components/reporting/Reporting";
-import MyPost from "../containers/Post/MyPost";
-import HeaderMenu from "../components/HeaderMenu";
 
-import Home from '../containers/Home/Home'
+import Home from '../containers/Home/Home';
+import MyPost from "../containers/Post/MyPost";
+import CreatePost from "../containers/Post/CreatePost";
 
 function AppRouter() {
     return (
         <div>
-            <HeaderMenu />
             <Router>
                 <Switch>
                     <Route path="/" exact component = {Home} />
@@ -43,7 +41,7 @@ function AppRouter() {
                     <Route path="/user/register" exact component = {RegisterUser} />
                     <Route path="/blog" exact component = {Blog} />
                     <AuthenticatedRoute path="/user/list" exact component={UserList} />
-                    <AuthenticatedRoute path="/blog/create" exact component={CreateBlog} />
+                    <AuthenticatedRoute path="/blog/create" exact component={CreatePost} />
                     <AuthenticatedRoute path="/blog/mypost" exact component = {MyPost} />
                 </Switch>
             </Router>

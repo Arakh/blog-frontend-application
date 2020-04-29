@@ -1,7 +1,7 @@
 import React from 'react';
 import { EditorState, RichUtils, AtomicBlockUtils } from 'draft-js';
 import Editor from "draft-js-plugins-editor";
-import { mediaBlockRenderer } from "./MediaBlockrenderer";
+import { mediaBlockRenderer } from "../MediaBlockRenderer";
 import ProxyServices from "../../Service/ProxyServices";
 
 

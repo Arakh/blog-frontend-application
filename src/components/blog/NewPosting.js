@@ -2,7 +2,7 @@ import React from 'react';
 import Dropdown from "../dropdownmenu/CategoryDropdown";
 import ProxyServices from "../../Service/ProxyServices";
 import { EditorState, RichUtils, AtomicBlockUtils, convertFromRaw } from 'draft-js';
-import { mediaBlockRenderer } from "./MediaBlockrenderer";
+import { mediaBlockRenderer } from "../MediaBlockRenderer";
 import Pagination from 'react-js-pagination';
 import HeaderMenu from "../HeaderMenu";
 
@@ -78,7 +78,7 @@ class NewPosting extends React.Component {
 	render() {
 		return(
 			<div>
-				<HeaderMenu/>
+				<HeaderMenu />
 				<div style={{marginTop:'10px'}}>
 					<div className="row" style={{marginLeft:'20px', marginRight:'20px'}}>
 						<div className="col-md-12">

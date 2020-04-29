@@ -4,6 +4,7 @@ import ProxyServices from "../../Service/ProxyServices";
 import CanvasJSReact from '../../library/canvasjs.react';
 import SockJsClient from 'react-stomp';
 import {NotificationManager} from "react-notifications";
+import HeaderMenu from "../../components/HeaderMenu";
 
 export class Reporting extends React.Component {
 
@@ -113,6 +114,7 @@ export class Reporting extends React.Component {
 	render() {
 		return (
 			<div>
+				<HeaderMenu />
 				<div className="row">
 
 					<div className="col-md-12" style={{marginTop:'20px', marginLeft: '10px', marginRight: '15px'}}>
