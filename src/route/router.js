@@ -4,7 +4,6 @@ import AuthenticatedRoute from '../route/AuthenticatedRoute'
 import RegisterUser from '../components/UserRegister'
 import Login from '../components/Login'
 import UserList from "../components/UserList";
-import Index from '../components/Index'
 import Logout from '../components/Logout'
 import RegisterSuccess from '../components/RegisterSuccess'
 import RegisterFailed from '../components/RegisterFailed'
