@@ -1,14 +1,16 @@
 import React from 'react';
 import ProxyServices from "../../Service/ProxyServices";
+import { withRouter } from 'react-router-dom';
 import queryString from 'query-string';
 import { EditorState } from 'draft-js';
-import { mediaBlockRenderer } from "../blog/MediaBlockrenderer";
+import { mediaBlockRenderer } from "../../components/blog/MediaBlockrenderer";
 import Pagination from 'react-js-pagination';
-import { DropdownButton, Dropdown, Navbar, Nav, Form, FormControl, Button } from 'react-bootstrap';
-import PostThumbnail from "./PostThumbnail";
+import { DropdownButton, Dropdown, Alert, Navbar, Nav, Form, FormControl, Button } from 'react-bootstrap';
+import HeaderMenu from "../../components/HeaderMenu";
+import BlogData from "./BlogData";
 import ResultLabel from "./ResultLabel";
 
-class PostList extends React.Component {
+class Home extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -16,35 +18,21 @@ class PostList extends React.Component {
 			blogs: [],
 			categories: [{'id': 0, name: 'All'}],
 			keyword: '',
-			category: '',
+			selectedCategory: '',
 			editorState: EditorState.createEmpty(),
 			activePage: 1,
-			link: this.props.link
+			link: '/home?category='
 		}
 
 		this.onSearchChange = this.onSearchChange.bind(this);
 		this.onSubmitSearch = this.onSubmitSearch.bind(this);
 		this.handlePageChange = this.handlePageChange.bind(this);
-		this.getMyPosting = this.getMyPosting.bind(this);
-		this.searchByUsernameAndKeyword = this.searchByUsernameAndKeyword.bind(this);
 	}
 
 	handlePageChange(pageNumber) {
 		this.setState({activePage: pageNumber});
 
-		if (this.props.source === "Home") {
-			this.fetchBlogData("", pageNumber);
-		} else if (this.props.source === "MyPost") {
-			this.handlePageMyPost(pageNumber);
-		}
-	}
-
-	handlePageMyPost(pageNumber) {
-		if (this.state.keyword) {
-			this.searchByUsernameAndKeyword(pageNumber-1, this.props.author, this.state.keyword);
-		} else {
-			this.getMyPosting(pageNumber-1, this.props.author, this.state.category);
-		}
+		this.fetchBlogData("", pageNumber)
 	}
 
 	onChange = (editorState) => {
@@ -64,14 +52,6 @@ class PostList extends React.Component {
 	onSubmitSearch(event) {
 		event.preventDefault();
 
-		if (this.props.source === "Home") {
-			this.getBlogByKeyWord();
-		} else if (this.props.source === "MyPost") {
-			this.searchByUsernameAndKeyword(0, this.props.author, this.state.keyword);
-		}
-	}
-
-	getBlogByKeyWord() {
 		ProxyServices.getBlogByKeyWord(this.state.keyword)
 			.then(response => response.data)
 			.then((json) => {
@@ -98,27 +78,9 @@ class PostList extends React.Component {
 		}
 	}
 
-	searchByUsernameAndKeyword(pageNumber, username, keyword) {
-		ProxyServices.getPostingByUsernameAndKeyword(pageNumber, username, keyword)
-			.then(response => response.data)
-			.then((json) => {
-				this.setState({blogs: json});
-			}).catch(() => {
-		})
-	}
-
-	getMyPosting(pageNumber, username, category) {
-		ProxyServices.getPostingByUsername(pageNumber, username, category)
-			.then(response => response.data)
-			.then((json) => {
-				this.setState({blogs: json});
-			}).catch(() => {
-		})
-	}
-
 	componentDidMount() {
-		let params = queryString.parse(this.props.location.search);
-		this.setState({category: params.category});
+		this.setState({selectedCategory: queryString.parse(this.props.location.search).category});
+		this.fetchBlogData(this.state.selectedCategory, 0);
 
 		ProxyServices.getCategoryList()
 			.then(response => response.data)
@@ -126,17 +88,12 @@ class PostList extends React.Component {
 				this.setState({categories: [...this.state.categories, ...json]});
 			}).catch(() => {
 		})
-
-		if (this.props.source === "Home") {
-			this.fetchBlogData(params.category, 0);
-		} else if (this.props.source === "MyPost") {
-			this.getMyPosting(0, this.props.author, params.category);
-		}
 	}
 
 	render() {
 		return (
 			<div>
+				<HeaderMenu/>
 				<div className="row" style={{marginLeft:'20px', marginRight:'20px', marginTop:'10px'}}>
 					<div className="col-md-12">
 						<Navbar expand="md" bg="light" variant="light">
@@ -161,10 +118,10 @@ class PostList extends React.Component {
 					</div>
 				</div>
 				<div className="row justify-content-md-center" style={{marginLeft:'30px', marginRight:'30px'}}>
-					<ResultLabel category={this.state.category} keyword={this.state.keyword} author={this.props.author} />
+					<ResultLabel category={this.state.selectedCategory} keyword={this.state.keyword} />
 				</div>
 				<div id="data" className="row" style={{marginLeft:'30px', marginRight:'30px'}}>
-					{this.state.blogs.map((data, i) => <PostThumbnail key = {i} data = {data} editor={this.state.editorState} onChange={this.onEditorChange} blockRendererFn={mediaBlockRenderer} plugins={this.plugins} />)}
+					{this.state.blogs.map((data, i) => <BlogData key = {i} data = {data} editor={this.state.editorState} onChange={this.onEditorChange} blockRendererFn={mediaBlockRenderer} plugins={this.plugins} />)}
 				</div>
 				{/* <div className="row justify-content-md-center" style={{marginLeft:'30px', marginRight:'30px'}}>
 					<Pagination
@@ -182,6 +139,6 @@ class PostList extends React.Component {
 	}
 }
 
-export default PostList;
+export default withRouter(Home);
 
 
