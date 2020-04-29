@@ -217,12 +217,11 @@ class ProxyServices {
 	getPostingByUsername(pageNumber, username, category) {
 		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-		if (category) {
+		if (category && category !== "All") {
 			return axios.get(`${API_URL2}/api/post-by-username-and-category`+"?username="+username+"&category="+category+"&page="+(pageNumber)+"&size=6");
 		}
 
 		return axios.get(`${API_URL2}/api/post-by-username`+"?username="+username+"&page="+(pageNumber)+"&size=6");
-
 	}
 
 	getPostingByUsernameAndKeyword(pageNumber, username, keyword) {
@@ -233,14 +232,12 @@ class ProxyServices {
 		}
 
 		return axios.get(`${API_URL2}/api/post-by-username`+"?username="+username+"&page="+(pageNumber)+"&size=6");
-
 	}
 
 	getUserData(username) {
 		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
 		return axios.get(`${API_URL}/api/find-user-by-username/`+username);
-
 	}
 
 	deleteUser(username) {
