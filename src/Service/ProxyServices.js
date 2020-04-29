@@ -1,6 +1,4 @@
 import axios from 'axios'
-import {Redirect} from "react-router-dom";
-import React from "react";
 
 const API_URL = 'http://localhost:8090';
 const API_URL2 = 'http://localhost:8081';
@@ -13,345 +11,240 @@ export const TOKEN = ''
 
 class ProxyServices {
 
-    executeBasicAuthenticationService(username, password) {
-
-        let payload = {
-            username: username,
-            password: password
-        };
-
-        console.log("Payload:", payload);
-
-        let basicAuth = btoa(username + ':' + password);
-        axios.defaults.headers.common = {'Authorization': `Basic ${basicAuth}`};
-
-        return axios.post(`${API_URL}/api/authentication`, payload)
-    }
-
-    createBasicAuthToken(username, password) {
-        return 'Basic ' + window.btoa(username + ":" + password)
-    }
-
-    registerSuccessfulLogin(username, password, token) {
-        localStorage.setItem(TOKEN, token)
-        localStorage.setItem(USER_NAME_SESSION_ATTRIBUTE_NAME, username)
-        localStorage.setItem(PASSWORD_SESSION_ATTRIBUTE_NAME, password)
-
-        this.getUserData(username)
-            .then(response => response.data)
-            .then((json) => {
-                console.log("Response:", JSON.stringify(json));
-                localStorage.setItem("id", json.data.data.id);
-                localStorage.setItem("firstname", json.data.data.firstname);
-                localStorage.setItem("lastname", json.data.data.lastname);
-                console.log("LASTNAME:", json.data.data.lastname);
-            }).catch(() => {
-        });
-
-
-    }
-
-
-    logout() {
-        localStorage.removeItem(USER_NAME_SESSION_ATTRIBUTE_NAME);
-        localStorage.removeItem(TOKEN);
-        /*return <Redirect to="/login" />*/
-    }
-
-    isUserLoggedIn() {
-        let user = localStorage.getItem(USER_NAME_SESSION_ATTRIBUTE_NAME)
-        //let password = localStorage.getItem(PASSWORD_SESSION_ATTRIBUTE_NAME)
-        if (user === null) return false
-        return true
-    }
-
-    getToken(){
-        return localStorage.getItem(TOKEN)
-    }
-
-    getUserList(){
-        /*let basicAuth = btoa(localStorage.getItem(USER_NAME_SESSION_ATTRIBUTE_NAME) + ':' + localStorage.getItem(PASSWORD_SESSION_ATTRIBUTE_NAME));
-        axios.defaults.headers.common = {'Authorization': `Basic ${basicAuth}`};*/
-        let token = this.getToken();
-        console.log("TOKEN SERVICE:", token);
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
-
-        return axios.get(`${API_URL}/api/all-users`);
-
-    }
-
-    resetPasswordRequest(email){
-        let payload = {
-            email: email
-        }
-        return axios.post(`${API_URL}/api/resetpassword`, payload);
-    }
-
-    getBlogList(category, page){
-
-        let token = this.getToken();
-        console.log("TOKEN SERVICE:", token);
-        //axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
-
-        if(category == '' || category == null){
-           /* return axios.get(`${API_URL}/services/blog/api/posts`);*/
-            return axios.get(`${API_URL2}/api/posts?page=${page}&size=6`);
-        }else{
-            return axios.get(`${API_URL2}/api/posts/category?category=`+ category+'&page='+page+'&size=6');
-        }
-    }
+	executeBasicAuthenticationService(username, password) {
 
-    getCategoryList(){
-        let token = this.getToken();
-        console.log("TOKEN SERVICE:", token);
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
+		let payload = {
+			username: username,
+			password: password
+		};
 
-        return axios.get(`${API_URL2}/api/categories`);
-    }
+		let basicAuth = btoa(username + ':' + password);
+		axios.defaults.headers.common = {'Authorization': `Basic ${basicAuth}`};
 
-    submitBlog(payload){
-        console.log("Payload:"+JSON.stringify( payload ));
-        let token = this.getToken();
-        console.log("TOKEN SERVICE:", token);
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
+		return axios.post(`${API_URL}/api/authentication`, payload)
+	}
 
-        return axios.post(`${API_URL2}/api/posts`, payload);
-    }
+	createBasicAuthToken(username, password) {
+		return 'Basic ' + window.btoa(username + ":" + password)
+	}
 
-    createCategory(payload){
-        console.log("Payload:"+JSON.stringify( payload ));
-        let token = this.getToken();
-        console.log("TOKEN SERVICE:", token);
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
+	registerSuccessfulLogin(username, password, token) {
+		localStorage.setItem(TOKEN, token)
+		localStorage.setItem(USER_NAME_SESSION_ATTRIBUTE_NAME, username)
+		localStorage.setItem(PASSWORD_SESSION_ATTRIBUTE_NAME, password)
 
-        return axios.post(`${API_URL2}/api/categories`, payload);
-    }
+		this.getUserData(username)
+			.then(response => response.data)
+			.then((json) => {
+				localStorage.setItem("id", json.data.data.id);
+				localStorage.setItem("firstname", json.data.data.firstname);
+				localStorage.setItem("lastname", json.data.data.lastname);
+			}).catch(() => {
+		});
+	}
 
-    getBlogByTitle(title){
+	logout() {
+		localStorage.removeItem(USER_NAME_SESSION_ATTRIBUTE_NAME);
+		localStorage.removeItem(TOKEN);
+	}
 
-        let token = this.getToken();
-        console.log("TOKEN SERVICE:", token);
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
+	isUserLoggedIn() {
+		let user = localStorage.getItem(USER_NAME_SESSION_ATTRIBUTE_NAME)
+		if (user === null) return false
+		return true
+	}
 
-        if(title){
-            /* return axios.get(`${API_URL}/services/blog/api/posts`);*/
-            return axios.get(`${API_URL2}/api/post?title=${title}` );
-        }
-    }
+	getToken() {
+		return localStorage.getItem(TOKEN)
+	}
 
-    submitComment(payload){
-        console.log("Payload:"+JSON.stringify( payload ));
-        let token = this.getToken();
-        console.log("TOKEN SERVICE:", token);
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
+	getUserList() {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-        return axios.post(`${API_URL2}/api/comments`, payload);
-    }
+		return axios.get(`${API_URL}/api/all-users`);
 
-    getCommentByTitle(title){
+	}
 
-        let token = this.getToken();
-        console.log("TOKEN SERVICE:", token);
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
+	resetPasswordRequest(email) {
+		let payload = {
+			email: email
+		}
+		return axios.post(`${API_URL}/api/resetpassword`, payload);
+	}
 
-        if(title){
-            /* return axios.get(`${API_URL}/services/blog/api/posts`);*/
-            return axios.get(`${API_URL2}/api/comments-by-title?title=${title}` );
-        }
-    }
+	getBlogList(category, page) {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-    getTodayPosting(pageNumber){
+		if (category == '' || category == null || category == 'All') {
+			return axios.get(`${API_URL2}/api/posts?page=${page}&size=6`);
+		} else {
+			return axios.get(`${API_URL2}/api/posts/category?category=`+ category+'&page='+page+'&size=6');
+		}
+	}
 
-        let token = this.getToken();
-        console.log("TOKEN SERVICE:", token);
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
+	getCategoryList() {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-        /* return axios.get(`${API_URL}/services/blog/api/posts`);*/
-        return axios.get(`${API_URL2}/api/posts/today`+"?page="+(pageNumber-1)+"&size=6");
+		return axios.get(`${API_URL2}/api/categories`);
+	}
 
-    }
+	submitBlog(payload) {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-    getBlogByKeyWord(keyword, pagenumber){
+		return axios.post(`${API_URL2}/api/posts`, payload);
+	}
 
-        let token = this.getToken();
-        console.log("TOKEN SERVICE:", token);
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
+	createCategory(payload) {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-        if(pagenumber){
-            return axios.get(`${API_URL2}/api/posts/search?keyword=${keyword}&page=${pagenumber}&size=6` );
-        }else{
-            return axios.get(`${API_URL2}/api/posts/search?keyword=${keyword}&page=0&size=6` );
-        }
+		return axios.post(`${API_URL2}/api/categories`, payload);
+	}
 
+	getBlogByTitle(title) {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
 
+		if (title) {
+			return axios.get(`${API_URL2}/api/post?title=${title}` );
+		}
+	}
 
+	submitComment(payload) {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-    }
+		return axios.post(`${API_URL2}/api/comments`, payload);
+	}
 
-    getAllApprovalData(approvalProgress, page){
+	getCommentByTitle(title) {
+	   axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-        let token = this.getToken();
-        //console.log("TOKEN SERVICE:", token);
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
 
+		if (title) {
+			return axios.get(`${API_URL2}/api/comments-by-title?title=${title}` );
+		}
+	}
 
-        if(approvalProgress){
-            return axios.get(`${API_URL_APPROVAL}/api/approval-list?approval=${approvalProgress}`+'&page='+page+"&size=6" );
-        }
-    }
+	getTodayPosting(pageNumber) {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-    updateProgressStatus(id, status, progress){
+		return axios.get(`${API_URL2}/api/posts/today`+"?page="+(pageNumber-1)+"&size=6");
 
-        let token = this.getToken();
-        //console.log("TOKEN SERVICE:", token);
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
+	}
 
-        if(id){
-            return axios.post(`${API_URL_APPROVAL}/api/process?id=${id}&status=${status}&progress=${progress}` );
-        }
-    }
+	getBlogByKeyWord(keyword, pagenumber) {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-    sendNotification(message){
-        let token = this.getToken();
-        //console.log("TOKEN SERVICE:", token);
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
+		if (pagenumber) {
+			return axios.get(`${API_URL2}/api/posts/search?keyword=${keyword}&page=${pagenumber}&size=6` );
+		} else {
+			return axios.get(`${API_URL2}/api/posts/search?keyword=${keyword}&page=0&size=6` );
+		}
+	}
 
-        if(message){
-            return axios.get(`${API_URL_APPROVAL}/send/message?message=${message}`);
-        }
-    }
+	getAllApprovalData(approvalProgress, page) {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-    getStatistic(){
-        let token = this.getToken();
-        //console.log("TOKEN SERVICE:", token);
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
+		if (approvalProgress) {
+			return axios.get(`${API_URL_APPROVAL}/api/approval-list?approval=${approvalProgress}`+'&page='+page+"&size=6" );
+		}
+	}
 
-        return axios.get(`${API_URL_REPORT}/api/statistic` );
-    }
+	updateProgressStatus(id, status, progress) {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-    getBlogNumberPerCategory(){
-        let token = this.getToken();
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
 
-        return axios.get(`${API_URL2}/api/posts/report` );
-    }
+		if (id) {
+			return axios.post(`${API_URL_APPROVAL}/api/process?id=${id}&status=${status}&progress=${progress}` );
+		}
+	}
 
-    getBlogNumberPerCategoryV2(){
-        let token = this.getToken();
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
+	sendNotification(message) {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-        return axios.get(`${API_URL2}/api/posts/report-v2` );
-    }
+		if (message) {
+			return axios.get(`${API_URL_APPROVAL}/send/message?message=${message}`);
+		}
+	}
 
-    getBlogNumber(){
-        let token = this.getToken();
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
+	getStatistic() {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-        return axios.get(`${API_URL2}/api/posts/blog-rownum` );
-    }
+		return axios.get(`${API_URL_REPORT}/api/statistic` );
+	}
 
-    getApprovalStatistic(){
-        let token = this.getToken();
-        //console.log("TOKEN SERVICE:", token);
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
+	getBlogNumberPerCategory() {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-        return axios.get(`${API_URL_APPROVAL}/api/approval-statistic` );
-    }
+		return axios.get(`${API_URL2}/api/posts/report` );
+	}
 
-    getApprovalResultStatistic(){
-        let token = this.getToken();
-        //console.log("TOKEN SERVICE:", token);
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
+	getBlogNumberPerCategoryV2() {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-        return axios.get(`${API_URL_APPROVAL}/api/approval-result-statistic` );
-    }
+		return axios.get(`${API_URL2}/api/posts/report-v2` );
+	}
 
-    getApprovalResultStatisticV2(){
-        let token = this.getToken();
-        //console.log("TOKEN SERVICE:", token);
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
+	getBlogNumber() {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-        return axios.get(`${API_URL_APPROVAL}/api/approval-result-statistic-v2` );
-    }
+		return axios.get(`${API_URL2}/api/posts/blog-rownum` );
+	}
 
-    getApprovalStatisticV2(){
-        let token = this.getToken();
-        //console.log("TOKEN SERVICE:", token);
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
+	getApprovalStatistic() {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-        return axios.get(`${API_URL_APPROVAL}/api/approval-statistic-v2` );
-    }
+		return axios.get(`${API_URL_APPROVAL}/api/approval-statistic` );
+	}
 
-    getPostingByUsername(pageNumber, username, category){
+	getApprovalResultStatistic() {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-        let token = this.getToken();
-        console.log("TOKEN SERVICE:", token);
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
+		return axios.get(`${API_URL_APPROVAL}/api/approval-result-statistic` );
+	}
 
-        if(category){
-            return axios.get(`${API_URL2}/api/post-by-username-and-category`+"?username="+username+"&category="+category+"&page="+(pageNumber)+"&size=6");
-        }
+	getApprovalResultStatisticV2() {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-        return axios.get(`${API_URL2}/api/post-by-username`+"?username="+username+"&page="+(pageNumber)+"&size=6");
+		return axios.get(`${API_URL_APPROVAL}/api/approval-result-statistic-v2` );
+	}
 
-    }
+	getApprovalStatisticV2() {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-    getPostingByUsernameAndKeyword(pageNumber, username, keyword){
+		return axios.get(`${API_URL_APPROVAL}/api/approval-statistic-v2` );
+	}
 
-        let token = this.getToken();
-        console.log("TOKEN SERVICE:", token);
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
+	getPostingByUsername(pageNumber, username, category) {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-        if(keyword){
-            return axios.get(`${API_URL2}/api/post-by-username-and-keyword`+"?username="+username+"&keyword="+keyword+"&page="+(pageNumber)+"&size=6");
-        }
+		if (category && category !== "All") {
+			return axios.get(`${API_URL2}/api/post-by-username-and-category`+"?username="+username+"&category="+category+"&page="+(pageNumber)+"&size=6");
+		}
 
-        return axios.get(`${API_URL2}/api/post-by-username`+"?username="+username+"&page="+(pageNumber)+"&size=6");
+		return axios.get(`${API_URL2}/api/post-by-username`+"?username="+username+"&page="+(pageNumber)+"&size=6");
+	}
 
-    }
+	getPostingByUsernameAndKeyword(pageNumber, username, keyword) {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-    getUserData(username){
-        let token = this.getToken();
-        console.log("TOKEN SERVICE:", token);
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
+		if (keyword) {
+			return axios.get(`${API_URL2}/api/post-by-username-and-keyword`+"?username="+username+"&keyword="+keyword+"&page="+(pageNumber)+"&size=6");
+		}
 
-        return axios.get(`${API_URL}/api/find-user-by-username/`+username);
+		return axios.get(`${API_URL2}/api/post-by-username`+"?username="+username+"&page="+(pageNumber)+"&size=6");
+	}
 
-    }
+	getUserData(username) {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-    deleteUser(username){
-        let token = this.getToken();
-        console.log("TOKEN SERVICE:", token);
-        axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
-        console.log("Header:", axios.defaults.headers.common);
+		return axios.get(`${API_URL}/api/find-user-by-username/`+username);
+	}
 
-        return axios.delete(`${API_URL}/api/delete/user/`+username);
-    }
+	deleteUser(username) {
+		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
+
+		return axios.delete(`${API_URL}/api/delete/user/`+username);
+	}
 
 }
 

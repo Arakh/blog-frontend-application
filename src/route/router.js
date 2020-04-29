@@ -1,31 +1,34 @@
 import React from 'react' ;
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import AuthenticatedRoute from '../route/AuthenticatedRoute'
-import RegisterUser from '../component/UserRegister'
-import Login from '../component/Login'
-import UserList from "../component/UserList";
-import Index from '../component/Index'
-import Logout from '../component/Logout'
-import RegisterSuccess from '../component/RegisterSuccess'
-import RegisterFailed from '../component/RegisterFailed'
-import ResetPassword from "../component/ResetPassword";
-import CheckEmail from '../component/CheckEmail'
-import CreateBlog from "../component/blog/CreateBlog";
-import Blog from "../component/blog/Blog";
-import CreateCategory from "../component/category/CreateCategory";
-import CategoryList from "../component/category/CategoryList";
-import NewPosting from "../component/blog/NewPosting";
-import BlogApproval from "../component/blog/BlogApproval";
-import Reporting from "../component/reporting/Reporting";
-import MyPostingPage from "../component/blog/MyPostingPage";
+import RegisterUser from '../components/UserRegister'
+import Login from '../components/Login'
+import UserList from "../components/UserList";
+import Logout from '../components/Logout'
+import RegisterSuccess from '../components/RegisterSuccess'
+import RegisterFailed from '../components/RegisterFailed'
+import ResetPassword from "../components/ResetPassword";
+import CheckEmail from '../components/CheckEmail'
+import CreateBlog from "../components/blog/CreateBlog";
+import Blog from "../components/blog/Blog";
+import CreateCategory from "../components/category/CreateCategory";
+import CategoryList from "../components/category/CategoryList";
+import NewPosting from "../components/blog/NewPosting";
+import BlogApproval from "../components/blog/BlogApproval";
+import Reporting from "../components/reporting/Reporting";
+import MyPost from "../containers/Post/MyPost";
+import HeaderMenu from "../components/HeaderMenu";
+
+import Home from '../containers/Home/Home'
 
 function AppRouter() {
     return (
         <div>
+            <HeaderMenu />
             <Router>
                 <Switch>
-                    <Route path="/" exact component = {Index} />
-                    <Route path="/home" exact component = {Index} />
+                    <Route path="/" exact component = {Home} />
+                    <Route path="/home" exact component = {Home} />
                     <AuthenticatedRoute path="/blog/new" exact component = {NewPosting} />
                     <AuthenticatedRoute path="/category/create" exact component = {CreateCategory} />
                     <AuthenticatedRoute path="/category/list" exact component = {CategoryList} />
@@ -41,7 +44,7 @@ function AppRouter() {
                     <Route path="/blog" exact component = {Blog} />
                     <AuthenticatedRoute path="/user/list" exact component={UserList} />
                     <AuthenticatedRoute path="/blog/create" exact component={CreateBlog} />
-                    <AuthenticatedRoute path="/blog/mypost" exact component = {MyPostingPage} />
+                    <AuthenticatedRoute path="/blog/mypost" exact component = {MyPost} />
                 </Switch>
             </Router>
         </div>
