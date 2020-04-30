@@ -3,7 +3,6 @@ import ProxyServices from "../../Service/ProxyServices";
 import queryString from 'query-string';
 import { EditorState } from 'draft-js';
 import { mediaBlockRenderer } from "../MediaBlockRenderer";
-import Pagination from 'react-js-pagination';
 import { DropdownButton, Dropdown, Navbar, Nav, Form, FormControl, Button } from 'react-bootstrap';
 import PostThumbnail from "./PostThumbnail";
 import ResultLabel from "./ResultLabel";

@@ -7,7 +7,7 @@ const resultSearchLabel = (props) => {
     let author;
     let conjunction;
 
-    if (props.category && props.category != "All") {
+    if (props.category && props.category !=="All") {
         category = (<span><Alert.Link href='#'>"{props.category}"</Alert.Link> as Category</span>);
         conjunction = "and";
     }

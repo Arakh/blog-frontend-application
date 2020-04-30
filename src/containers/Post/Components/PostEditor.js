@@ -99,7 +99,7 @@ class PostEditor extends React.Component {
 	}
 
 	onSubmitBlog(event) {
-		if (this.state.title != "" && this.state.category !== "" && this.state.content !== "" && this.state.category !== undefined) {
+		if (this.state.title !== "" && this.state.category !== "" && this.state.content !== "" && this.state.category !== undefined) {
 
 			let user = {
 				firstname: localStorage.getItem("firstname"),
@@ -126,7 +126,7 @@ class PostEditor extends React.Component {
 
 			})
 		} else {
-			this.setState({message: 'please insert all required field'});
+			this.setState({message: 'Please insert all required field'});
 		}
 
 	}
@@ -205,14 +205,8 @@ class PostEditor extends React.Component {
 									/>
 								</Col>
 							</Form.Group>
-							<div className="row" style={{marginTop:'20px'}}>
-								<div className="col-md-1">
-								</div>
-								<div className="col-md-7">
-									<Button id="createblog" onClick={this.onSubmitBlog}>Submit</Button>
-								</div>
-								<div className="col-md-4">
-								</div>
+							<div className="row float-right" style={{ paddingRight: '15px'}}>
+								<Button id="createblog" onClick={this.onSubmitBlog}>Submit</Button>
 							</div>
 						</Form>
 					</div>

@@ -75,7 +75,7 @@ class ProxyServices {
 	getBlogList(category, page) {
 		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-		if (category == '' || category == null || category == 'All') {
+		if (category === '' || category === null || category === 'All') {
 			return axios.get(`${API_URL2}/api/posts?page=${page}&size=6`);
 		} else {
 			return axios.get(`${API_URL2}/api/posts/category?category=`+ category+'&page='+page+'&size=6');
@@ -127,7 +127,7 @@ class ProxyServices {
 	getTodayPosting(pageNumber) {
 		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
-		return axios.get(`${API_URL2}/api/posts/today`+"?page="+(pageNumber-1)+"&size=6");
+		return axios.get(`${API_URL2}/api/posts/today?page=`+(pageNumber-1)+`&size=6`);
 
 	}
 
@@ -145,7 +145,7 @@ class ProxyServices {
 		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
 		if (approvalProgress) {
-			return axios.get(`${API_URL_APPROVAL}/api/approval-list?approval=${approvalProgress}`+'&page='+page+"&size=6" );
+			return axios.get(`${API_URL_APPROVAL}/api/approval-list?approval=${approvalProgress}&page=`+page+`&size=6` );
 		}
 	}
 
@@ -218,20 +218,20 @@ class ProxyServices {
 		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
 		if (category && category !== "All") {
-			return axios.get(`${API_URL2}/api/post-by-username-and-category`+"?username="+username+"&category="+category+"&page="+(pageNumber)+"&size=6");
+			return axios.get(`${API_URL2}/api/post-by-username-and-category?username=`+username+`&category=`+category+`&page=`+(pageNumber)+`&size=6`);
 		}
 
-		return axios.get(`${API_URL2}/api/post-by-username`+"?username="+username+"&page="+(pageNumber)+"&size=6");
+		return axios.get(`${API_URL2}/api/post-by-username?username=`+username+`&page=`+(pageNumber)+`&size=6`);
 	}
 
 	getPostingByUsernameAndKeyword(pageNumber, username, keyword) {
 		axios.defaults.headers.common = {'Authorization': `Bearer ${this.getToken()}`};
 
 		if (keyword) {
-			return axios.get(`${API_URL2}/api/post-by-username-and-keyword`+"?username="+username+"&keyword="+keyword+"&page="+(pageNumber)+"&size=6");
+			return axios.get(`${API_URL2}/api/post-by-username-and-keyword?username=`+username+`&keyword=`+keyword+`&page=`+(pageNumber)+`&size=6`);
 		}
 
-		return axios.get(`${API_URL2}/api/post-by-username`+"?username="+username+"&page="+(pageNumber)+"&size=6");
+		return axios.get(`${API_URL2}/api/post-by-username?username=`+username+`&page=`+(pageNumber)+`&size=6`);
 	}
 
 	getUserData(username) {

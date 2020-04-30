@@ -2,7 +2,7 @@ import React from 'react';
 import AuthenticationService from "../Service/ProxyServices";
 import { Navbar, NavDropdown, Nav } from 'react-bootstrap';
 
-import "./blog/css/style.css"
+import "./css/style.css"
 
 class HeaderMenu extends React.Component {
 
@@ -25,7 +25,7 @@ class HeaderMenu extends React.Component {
 							<NavDropdown.Item href="/blog/mypost">My Post</NavDropdown.Item>
 						</NavDropdown>
 						<NavDropdown title="Category" id="category-nav-dropdown">
-							<NavDropdown.Item href="/category/create">Create Blog Category</NavDropdown.Item>
+							<NavDropdown.Item href="/category/create">Create Post Category</NavDropdown.Item>
 							<NavDropdown.Item href="/category/list">Category List</NavDropdown.Item>
 						</NavDropdown>
 						<Nav.Link href="/blog/approval">Blog Approval</Nav.Link>

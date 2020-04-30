@@ -1,5 +1,4 @@
 import React from "react";
-import { EditorState, RichUtils, AtomicBlockUtils } from "draft-js";
 
 export const mediaBlockRenderer = block => {
     if (block.getType() === "atomic") {
@@ -14,7 +13,7 @@ export const mediaBlockRenderer = block => {
 
 const Image = props => {
     if (!!props.src) {
-        return <img src={props.src} />;
+        return <img src={props.src} alt="Not Found"/>;
     }
     return null;
 };
