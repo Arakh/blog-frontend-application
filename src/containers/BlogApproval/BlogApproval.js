@@ -3,6 +3,7 @@ import SockJsClient from 'react-stomp';
 import queryString from "query-string";
 import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
+import Pagination from 'react-js-pagination';
 
 import Todo from "./Components/Todo";
 import InProgress from "./Components/InProgress";
@@ -133,6 +134,17 @@ class BlogApproval extends React.Component {
 
 								  }}/>
 				</div>
+				<div className="row justify-content-md-center" style={{marginLeft:'30px', marginRight:'30px'}}>
+                    <Pagination
+                        activePage={this.state.activePage}
+                        itemsCountPerPage={10}
+                        totalItemsCount={450}
+                        pageRangeDisplayed={5}
+                        onChange={this.handlePageChange}
+                        itemClass="page-item"
+                        linkClass="page-link"
+                    />
+                </div>
 			</div>
 
 
