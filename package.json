@@ -13,7 +13,7 @@
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
     "bv-react-data-report": "^1.1.2",
-    "chart.js": "^2.8.0",
+    "chart.js": "^2.9.4",
     "classnames": "^2.2.6",
     "core-js": "^2.6.5",
     "draft-convert": "^2.1.8",
